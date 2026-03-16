@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance App</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header class="app-header">
+        <div class="container header-container">
+            <div class="logo">
+                <span class="material-symbols-rounded">account_balance_wallet</span>
+                <h1>Finance Tracker</h1>
+            </div>
+            <nav class="top-nav" id="sidebar-nav">
+                <a href="#" class="nav-item active" data-tab="dashboard">
+                    <span class="material-symbols-rounded">dashboard</span>
+                    Dashboard
+                </a>
+                <a href="#" class="nav-item" data-tab="transactions">
+                    <span class="material-symbols-rounded">receipt_long</span>
+                    Transactions
+                </a>
+                <a href="#" class="nav-item" data-tab="reports">
+                    <span class="material-symbols-rounded">insert_chart</span>
+                    Reports
+                </a>
+                <a href="#" class="nav-item" data-tab="savings">
+                    <span class="material-symbols-rounded">savings</span>
+                    Savings
+                </a>
+                <a href="#" class="nav-item" data-tab="budget">
+                    <span class="material-symbols-rounded">account_balance</span>
+                    Budget
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content container">
+        <div id="tab-dashboard" class="tab-pane active">
+            <header class="page-header" style="margin-bottom: 2rem;">
+                <h2>Welcome Back!</h2>
+                <p class="subtitle">Here is your financial overview.</p>
+            </header>
+            <section class="summary-cards">
+                <div class="card balance-card">
+                    <h3>Total Balance</h3>
+                    <h2 id="total-balance">₹0.00</h2>
+                </div>
+                <div class="card stat-card income">
+                    <div class="stat-header">
+                        <div class="stat-icon"><span class="material-symbols-rounded">north_east</span></div>
+                        <h3>Income</h3>
+                    </div>
+                    <p id="total-income" class="stat-amount">+₹0.00</p>
+                </div>
+                <div class="card stat-card expense">
+                    <div class="stat-header">
+                        <div class="stat-icon"><span class="material-symbols-rounded">south_west</span></div>
+                        <h3>Expenses</h3>
+                    </div>
+                    <p id="total-expense" class="stat-amount">-₹0.00</p>
+                </div>
+            </section>
+
+            <section class="dashboard-grid">
+                <div class="card">
+                    <h2>Income vs Expense Overview</h2>
+                    <div class="chart-container">
+                        <canvas id="overviewChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Expense Breakdown</h2>
+                    <div class="chart-container">
+                        <canvas id="expenseChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card history-section">
+                    <h2>Recent Transactions</h2>
+                    <ul class="transaction-list" id="recent-transaction-list">
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <div id="tab-transactions" class="tab-pane">
+            <div class="dashboard-grid">
+                <section class="card form-section">
+                    <h2>Add Transaction</h2>
+                    <form id="transaction-form">
+                        <div class="form-group">
+                            <label>Type</label>
+                            <div class="type-toggle">
+                                <input type="radio" id="type-expense" name="type" value="expense" checked>
+                                <label for="type-expense">Expense</label>
+                                <input type="radio" id="type-income" name="type" value="income">
+                                <label for="type-income">Income</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="amount">Amount (₹)</label>
+                            <div class="input-with-icon">
+                                <span class="material-symbols-rounded">currency_rupee</span>
+                                <input type="number" id="amount" placeholder="0.00" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <div class="input-with-icon">
+                                <span class="material-symbols-rounded">category</span>
+                                <select id="category" required>
+                                    <option value="" disabled selected hidden>Select category</option>
+                                    <option value="housing">Housing & Utilities</option>
+                                    <option value="food">Food & Dining</option>
+                                    <option value="transport">Transportation</option>
+                                    <option value="entertainment">Entertainment</option>
+                                    <option value="salary">Salary / Income</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" id="note-group">
+                            <label for="description">Note</label>
+                            <div class="input-with-icon">
+                                <span class="material-symbols-rounded">edit_note</span>
+                                <input type="text" id="description" placeholder="e.g. Groceries" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">
+                            <span class="material-symbols-rounded">add</span> Add Transaction
+                        </button>
+                    </form>
+                </section>
+                <section class="card history-section">
+                    <h2>All Transactions</h2>
+                    <ul class="transaction-list" id="transaction-list">
+                    </ul>
+                </section>
+            </div>
+        </div>
+
+        <div id="tab-budget" class="tab-pane">
+            <div class="card budget-card">
+                <h2>Monthly Category Budgets</h2>
+                <p class="subtitle" style="margin-bottom: 1.5rem;">Set spending limits for this month.</p>
+                <div id="budget-list" class="budget-list">
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-reports" class="tab-pane">
+            <div class="reports-header" style="margin-bottom: 2rem;">
+                <h2 style="font-size: 1.5rem;">Reports</h2>
+                <div class="reports-meta">
+                    <span class="current-date" id="reports-date"
+                        style="margin-top: 0.5rem; font-weight: 500;">Date</span>
+                </div>
+            </div>
+            <div class="card full-width-card">
+                <h2>Financial Trend</h2>
+                <div class="chart-container" style="height: 400px; margin-top: 1.5rem;">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-savings" class="tab-pane">
+            <div class="card savings-card">
+                <h2>Savings Goal</h2>
+                <p class="subtitle" style="margin-bottom: 1.5rem;">Track your progress towards your financial target.
+                </p>
+
+                <div class="form-group" style="max-width: 300px; margin-bottom: 2rem;">
+                    <label for="savings-goal-input">Target Goal (₹)</label>
+                    <div class="input-with-icon">
+                        <span class="material-symbols-rounded">flag</span>
+                        <input type="number" id="savings-goal-input" placeholder="0.00" step="1000">
+                    </div>
+                </div>
+
+                <div class="savings-progress-container">
+                    <div class="savings-stats"
+                        style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span id="savings-current">₹0.00 Saved</span>
+                        <span id="savings-target">Target: ₹0.00</span>
+                    </div>
+                    <div class="budget-progress" style="height: 24px; border-radius: 12px;">
+                        <div id="savings-fill" class="budget-fill" style="width: 0%; background: var(--income-color);">
+                        </div>
+                    </div>
+                    <p id="savings-percentage"
+                        style="text-align: right; margin-top: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">0%
+                        Achieved</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
